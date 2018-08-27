@@ -30,6 +30,7 @@ public class MainViewPresenter implements MainActivityContract.Presenter, MainAc
 	@Override
 	public void getTopMovies(String apiKey) {
 
+		mView.showProgressDialog();
 		mModel.getTopMovies(apiKey, this);
 	}
 
@@ -42,18 +43,21 @@ public class MainViewPresenter implements MainActivityContract.Presenter, MainAc
 	public void onSuccess(Response<TopMoviesResponse> response) {
 
 		Log.d("mvp", response.body().getResults().size() + "");
+		mView.hideProgressDialog();
 		mView.displayMovieData(response.body().getResults());
 	}
 
 	@Override
 	public void onError(Response<TopMoviesResponse> response) {
 
+		mView.hideProgressDialog();
 		mView.showMessage("Error Occured.");
 	}
 
 	@Override
 	public void onFailure(Throwable t) {
 
+		mView.hideProgressDialog();
 		mView.showMessage(t.getMessage());
 	}
 
